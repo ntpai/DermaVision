@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+/* --- Variables for Easy Color Management --- */
+:root {
+    --primary-color: #2B2D42;       /* Dark Navy - Navbar/Headers */
+    --secondary-color: #8D99AE;     /* Cool Grey - Subtitles/Borders */
+    --accent-color: #3A86FF;        /* Electric Blue - Main Buttons */
+    --accent-hover: #235dbe;        /* Darker Blue for Hover effect */
+    --bg-color: #FFFFFF;            /* Pure White - Background */
+    --card-bg: #F8F9FA;             /* Very Light Grey - Card Background */
+    --text-main: #2B2D42;           /* Dark Navy - Main Text */
+    --success-color: #06D6A0;       /* Neon Mint - Benign Result */
+    --danger-color: #EF476F;        /* Bright Pink-Red - Melanoma Result */
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* --- Global Styles --- */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+input[type="text"], input[type="password"] {
+    width: 40%;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid var(--secondary-color);
+}
+/* --- Navigation Bar --- */
+.navbar {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.navbar a{
+    color: white;
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-weight: 600;
+}
+
+.navbar a:hover{
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
+/* --- Layout Containers --- */
+.container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 20px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid #E0E0E0;
+    border-radius: 12px; /* Smooth rounded corners */
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+/* --- Buttons --- */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;
+}
+
+/* Primary Action (Upload/Submit) */
+.btn-primary {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+}
+
+/* Secondary Action (Cancel/Back) */
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #6c757d;
+}
+
+/* --- Image Upload Zone --- */
+.upload-zone {
+    border: 2px dashed var(--accent-color);
+    background-color: #f0f7ff;
+    padding: 3rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+/* --- Result Tags (The Medical Diagnosis) --- */
+.result-box {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    display: inline-block;
+}
+
+.status-benign {
+    background-color: rgba(6, 214, 160, 0.1); /* Light Green bg */
+    color: var(--success-color);
+    border: 1px solid var(--success-color);
+}
+
+.status-cancer {
+    background-color: rgba(239, 71, 111, 0.1); /* Light Red bg */
+    color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+}
