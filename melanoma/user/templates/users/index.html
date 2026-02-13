@@ -5,4 +5,9 @@
 {% block content %}
 <h1>Welcome to the User Dashboard</h1>
 <p>This is the main page for users.</p>
+
+{% for message in messages %}
+    <div class="alert alert-danger">{{ message }}</div>
+{% endfor %}
+
 {% endblock %}

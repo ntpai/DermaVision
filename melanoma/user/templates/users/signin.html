@@ -14,8 +14,9 @@
 {% block content %}
 
 <div class="container card">
-    <h2>Login</h2>
-    <form action="username" method="post">
+    <h2>Signin</h2>
+    <form method="post">
+        {% csrf_token %}
         <div>
             <label for="username">Username:</label>
             <input type="text" name="username" id="username">
@@ -28,11 +29,13 @@
         <br>
         <div>
             <button class="btn btn-primary">
-                <a href="{% url 'register' %}">Register</a>
+                <a href="{% url 'signup' %}">Signup</a>
             </button>
             <button class="btn btn-secondary">Submit</button>
         </div>
     </form>
 </div>
-
+{% for message in messages %}
+    <div class="alert alert-danger">{{ message }}</div>
+{% endfor %}
 {% endblock %}

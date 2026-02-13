@@ -1,0 +1,32 @@
+{% extends 'users/base_users.html' %}
+
+{% block title %}User Registeration{% endblock %}
+
+{% block extra_styles %} 
+    <style>
+        .container {
+            max-width: 600px;
+            height: fit-content;
+        }
+        
+    </style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container card">
+    <h2>Sign up</h2>
+    {% for message in messages %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+    <form method="post" action="">
+        {% csrf_token %}
+        
+        {{ user_form.as_p }}
+
+        {{ profile_form.as_p }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+{% endblock %}
