@@ -1,22 +1,53 @@
-import cv2 
+import joblib
+import os
+
 import numpy as np
-from skimage.feature import graycomatrix, graycoprops
 
-def extract_features(image_path):
-    image = cv2.imread(image_path)
-    if image is None:
-        raise ValueError(f"Could not open or find the path: {image_path}")
-    
-    image = cv2.resize(image, (200, 200))
-    # The correct line:
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    glcm = graycomatrix(gray, distances=[1], angles=[0], 
-                        levels=256, symmetric=True, normed=True)
-    contrast = graycoprops(glcm, 'contrast')[0, 0]
-    dissimilarity = graycoprops(glcm, 'dissimilarity')[0, 0]
-    homogeneity = graycoprops(glcm, 'homogeneity')[0, 0]
-    energy = graycoprops(glcm, 'energy')[0, 0]
-    correlation = graycoprops(glcm, 'correlation')[0, 0]
+from features_extractor import extract_features
+import logging
 
-    return [contrast, dissimilarity, homogeneity, energy, correlation]
+MODEL_PATH = os.path.join(os.path.dirname(__file__), 'model.pkl')
+SCALER_PATH = os.path.join(os.path.dirname(__file__), 'scaler.pkl')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
+try:
+    logging.info("Loading Model & Scaler files.")
+    model = joblib.load(MODEL_PATH)
+    scaler = joblib.load(SCALER_PATH)
+except FileNotFoundError:
+    logging.error("Model or Scaler file not found!")
+    model = None
+    scaler = None
+
+def predict_melanoma(image_path):
+    if model is None or scaler is None:
+        return {
+            "labels": "Error",
+            "confidence": 0.0,
+            "message": "Check logs"
+        }
+    try:
+        features = extract_features(image_path)
+        features_array = np.array([features])
+        scaled_features = scaler.transform(features_array)
+
+        prediction = model.predict(scaled_features)[0,0]
+        probability = model.predict_proba(scaled_features)[0,0]
+
+        result_label = "Malignant" if prediction == 1 else "Benign"
+        confidence = probability[prediction] * 100
+
+        return {
+            "label": result_label,
+            "probability": probability,
+            "features": features,
+            "message": "Analysis successful"
+        }
+
+    except Exception as e:
+        logging.error(f"Exception occurred: {e}")
+        return {
+            "label": "Error",
+            "probability": 0.0,
+            "message": "Check server logs"
+        }

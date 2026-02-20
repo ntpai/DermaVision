@@ -1,6 +1,8 @@
 .idea/
 .vscode/
+# Images directories to train the model
 train/
+dataset/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
