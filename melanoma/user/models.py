@@ -1,3 +1,6 @@
+import datetime
+from datetime import timezone
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -24,7 +27,10 @@ def upload_to(instance, image_name):
     return f"images/{image_name}"
 
 class Image(models.Model):
-    user_id = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.RESTRICT,
+        null=True, blank=True)
     upload_at = models.DateTimeField(auto_now_add=True)
-    user_notes = models.TextField()
+    user_notes = models.CharField(max_length=250)
     image = models.ImageField(upload_to=upload_to,blank=True, null=True)

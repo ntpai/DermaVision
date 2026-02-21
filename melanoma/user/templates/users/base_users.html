@@ -26,8 +26,8 @@
         {% else %}
         <div>
             <a href="{% url 'user_home' %}">Home</a>
-            <a href="{% url 'signin' %}">Signin</a> 
-            <a href="{% url 'signup' %}">Signup</a>
+            <a href="{% url 'user_signin' %}">Signin</a>
+            <a href="{% url 'user_signup' %}">Signup</a>
             <a href="{% url 'upload_image' %}">Image Upload</a>
         </div>
         {% endif %}

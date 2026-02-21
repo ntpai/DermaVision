@@ -1,0 +1,13 @@
+{% extends 'users/base_users.html' %}
+
+{% block content %}
+    <div>
+        {% if is_valid  %}
+            <h3>Result: {{ label }} Accuracy: {{ accuracy }}%</h3>
+            <div>
+                <img src="" alt="">
+                <img src="" alt="">
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

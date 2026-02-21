@@ -1,9 +1,7 @@
 import joblib
 import os
-
 import numpy as np
-
-from features_extractor import extract_features
+from .features_extractor import extract_features
 import logging
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), 'model.pkl')
@@ -31,15 +29,14 @@ def predict_melanoma(image_path):
         features_array = np.array([features])
         scaled_features = scaler.transform(features_array)
 
-        prediction = model.predict(scaled_features)[0,0]
-        probability = model.predict_proba(scaled_features)[0,0]
+        prediction = model.predict(scaled_features)[0]
+        probability = model.predict_proba(scaled_features)[0]
 
         result_label = "Malignant" if prediction == 1 else "Benign"
         confidence = probability[prediction] * 100
-
         return {
             "label": result_label,
-            "probability": probability,
+            "probability": round(confidence, 2),
             "features": features,
             "message": "Analysis successful"
         }
