@@ -1,0 +1,12 @@
+{% extends 'users/base_users.html' %}
+{% block content %}
+    <div class="upload-zone">
+    <h3>Upload your image</h3>
+        <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+{% endblock %}

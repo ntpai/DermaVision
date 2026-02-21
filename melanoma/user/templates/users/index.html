@@ -3,8 +3,15 @@
 {% block title %}User Home{% endblock %}
 
 {% block content %}
-<h1>Welcome to the User Dashboard</h1>
-<p>This is the main page for users.</p>
+
+{% if user.is_authenticated %}
+    <h1>Welcome, {{ user.get_username }}</h1>
+{% else %}
+    <h1>
+        Please <a href="{% url 'signup' %}">Signup</a> or <a href="{% url 'signin' %}">Signin</a>
+    </h1>
+
+{% endif %}
 
 {% for message in messages %}
     <div class="alert alert-danger">{{ message }}</div>

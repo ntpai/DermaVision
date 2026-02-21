@@ -1,10 +1,13 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
 from .forms import *
 
 def index(request):
+    if request.user.is_authenticated:
+        user_id = request.user.id
+        print(f"ID: {user_id}")
     return render(request, 'users/index.html')
 
 def signup(request):
@@ -48,3 +51,21 @@ def signin(request):
             messages.error(request, "Invalid username or password!")
             return redirect("users/signin.html")
     return render(request, "users/signin.html")
+
+@login_required
+def log_out(request):
+    logout(request)
+    return redirect('user_home')
+
+@login_required
+def upload_image(request):
+    if request.method == "POST":
+        form = UploadImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            image_instance = form.save()
+            image_instance.user = request.user
+            image_instance.save()
+            return redirect('user_home')
+    else:
+        form = UploadImageForm()
+    return render(request, 'users/upload_image.html', {'form':form})
