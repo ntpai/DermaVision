@@ -1,13 +1,40 @@
 {% extends 'users/base_users.html' %}
-
+{% block extra_styles %}
+    <style>
+    .result-box {
+        width: 80vw;
+        height: fit-content;
+    }
+    #image-box {
+        display: flex;
+        justify-content: space-evenly;
+    }
+    .btn {
+        margin: 2rem 0 2rem 0;
+    }
+    </style>
+{% endblock %}
 {% block content %}
     <div>
         {% if is_valid  %}
-            <h3>Result: {{ label }} Accuracy: {{ accuracy }}%</h3>
-            <div>
-                <img src="" alt="">
-                <img src="" alt="">
+            <div class="card container">
+                <h2>Result: {{ label }}</h2>
+                <p>(Model prediction can be wrong. Book a doctor in case you feel irritations)</p>
+                <h3>Accuracy: {{ accuracy }}</h3>
+                <div id="image-box">
+                    <div>
+                        <img src="{{ image_path.image.url }}" alt="User uploaded image">
+                    </div>
+                    <div>
+                        <img src="data:image/webp;base64,{{ contour_image }}" alt="Contour image">
+                    </div>
+                </div>
+                <button class="btn btn-primary"><a href="{% url 'upload_image' %}">Upload another Image</a></button>
             </div>
+        {% else %}
+            <h3>Result: {{ label }}</h3>
+            <p>{{ message }}</p>
+            <button><a href="{% url 'upload_image' %}">Upload another Image</a></button>
         {% endif %}
     </div>
 {% endblock %}

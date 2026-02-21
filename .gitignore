@@ -3,6 +3,7 @@
 # Images directories to train the model
 train/
 dataset/
+media/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

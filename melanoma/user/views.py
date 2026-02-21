@@ -1,10 +1,10 @@
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
 
 from detection_model.predictor import predict_melanoma
+from detection_model.visualizer import visualizer
 from .forms import *
 from .models import Image
 
@@ -30,7 +30,7 @@ def signup(request):
             profile.save()
             
             login(request, user)
-            return redirect('index')
+            return redirect('user_home')
     else: 
         user_form = UserSignupForm()
         profile_form = PatientProfileForm()
@@ -38,7 +38,7 @@ def signup(request):
         'user_form': user_form,
         'profile_form': profile_form
     }
-    return render(request, 'users/signup.html')
+    return render(request, 'users/signup.html', context=context)
 
 
 def signin(request):
@@ -49,8 +49,7 @@ def signin(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/users')
-
+            return redirect('user_home')
         else:
             messages.error(request, "Invalid username or password!")
             return redirect("user_signin")
@@ -81,6 +80,7 @@ def image_result(request):
     current_user_id = request.user.id
     image_path = Image.objects.filter(user_id=current_user_id).order_by('-upload_at').first()
     prediction = predict_melanoma(image_path.image.path)
+    visuals = visualizer(image_path.image.path)
     """
     Prediction givens 
     label: Benign | Malignant
@@ -93,6 +93,7 @@ def image_result(request):
         context = {
             'is_valid': True,
             'image_path': image_path,
+            'contour_image': visuals['contour_image'],
             'label': prediction['label'],
             'message': prediction['message'],
             'features': prediction['features'],
