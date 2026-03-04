@@ -29,7 +29,11 @@
                         <img src="data:image/webp;base64,{{ contour_image }}" alt="Contour image">
                     </div>
                 </div>
-                <button class="btn btn-primary"><a href="{% url 'upload_image' %}">Upload another Image</a></button>
+                <div>
+                    <button class="btn btn-primary"><a href="#">Book Appointment</a></button>
+                    <button class="btn btn-secondary"><a href="{% url 'upload_image' %}">Upload another Image</a></button>
+
+                </div>
             </div>
         {% else %}
             <h3>Result: {{ label }}</h3>

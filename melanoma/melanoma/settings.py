@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'user'
+    'user',
+    'hospital',
 ]
 
 MIDDLEWARE = [
@@ -123,5 +124,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
 
 LOGIN_URL = 'user_signin'
-LOGIN_REDIRECT_URL = 'users/'
+LOGIN_REDIRECT_URL = 'hospital/'
 LOGOUT_REDIRECT_URL = ' /'
+AUTH_USER_MODEL = 'user.CustomUser'

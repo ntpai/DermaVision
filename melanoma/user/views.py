@@ -1,12 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth import login, logout, get_user_model
 from django.contrib import messages
 
 from detection_model.predictor import predict_melanoma
 from detection_model.visualizer import visualizer
 from .forms import *
 from .models import Image
+
+User = get_user_model()
 
 def index(request):
     if request.user.is_authenticated:
@@ -16,23 +18,23 @@ def index(request):
 
 def signup(request):
     if request.method == 'POST':
-        user_form = UserSignupForm(request.POST)
+        user_form = PatientSignupForm(request.POST)
         profile_form = PatientProfileForm(request.POST)
 
         if user_form.is_valid() and profile_form.is_valid():
             
-            user = user_form.save()
-            
+            user = user_form.save(commit=False)
+            user.is_patient = True
+            user.save()
+
             profile = profile_form.save(commit=False)
-            
-            profile.user = user  # This fills the OneToOneField
-            
+            profile.user = user
             profile.save()
             
             login(request, user)
             return redirect('user_home')
     else: 
-        user_form = UserSignupForm()
+        user_form = PatientSignupForm()
         profile_form = PatientProfileForm()
     context = {
         'user_form': user_form,
@@ -43,16 +45,22 @@ def signup(request):
 
 def signin(request):
     if request.method == "POST":
-        username = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
+        try:
+            user = User.objects.get(email=email)
+            if user.check_password(password):
+                login(request, user)
+                if user.is_superuser or user.is_patient:
+                    return redirect('user_home')
+                else:
+                    messages.error(request, "Invalid signin for user")
+            else:
+                return redirect('user_signin')
+        except User.DoesNotExist:
+            messages.error(request, "No user found! Sign up a new account.")
+            return redirect('user_signup')
 
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('user_home')
-        else:
-            messages.error(request, "Invalid username or password!")
-            return redirect("user_signin")
     return render(request, "users/signin.html")
 
 @login_required

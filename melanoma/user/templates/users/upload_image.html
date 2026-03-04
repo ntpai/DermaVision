@@ -1,21 +1,33 @@
 {% extends 'users/base_users.html' %}
 {% block extra_styles %}
     <style>
-    .upload-zone{
-        display: block;
-    }
-    .upload-zone form {
-        display: flex;
-    }
+        .container {
+            max-width: 60vh;
+            height: fit-content;
+            margin: 4rem auto 0 auto;
+
+        }
+        .field-items {
+            margin: 0.5rem 0 1rem 0;
+        }
     </style>
 {% endblock %}
+
 {% block content %}
-    <div class="upload-zone">
-    <h3>Upload your image</h3>
+    <div class="upload-zone container card">
+    <h2>Upload your image</h2>
         <form enctype="multipart/form-data" method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Submit</button>
+            {% for field in form %}
+                <div class="field-items">
+                    {{ field.label }}
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-secondary"><a href="{% url 'user_home' %}">Cancel</a></button>
+            </div>
         </form>
     </div>
 

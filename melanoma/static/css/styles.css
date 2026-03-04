@@ -106,6 +106,7 @@ input[type="email"] {
 .btn-primary {
     background-color: var(--accent-color);
     color: white;
+    margin-top: 1rem;
 }
 
 .btn-primary:hover {
@@ -155,3 +156,21 @@ input[type="email"] {
     border: 1px solid var(--danger-color);
 }
 
+.forms-div {
+    display: block;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+.forms-div label,
+.forms-div input,
+.forms-div ul,
+.forms-div select
+{
+    display: flex;
+    margin-top: 0.5rem;
+}
+.forms-div input,
+.forms-div select {
+    width: 60%;
+    height: 1.5rem;
+}

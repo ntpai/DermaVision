@@ -1,16 +1,55 @@
-import datetime
-from datetime import timezone
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 
 class Gender(models.TextChoices):
     Male = 'M', 'Male'
     Female = 'F', 'Female'
     PREFER_NOT_TO_SAY = 'U', 'Prefer not to say'
 
+class CustomUser(AbstractUser):
+    is_patient = models.BooleanField(default=False)
+    is_doctor = models.BooleanField(default=False)
+    is_hospital_admin = models.BooleanField(default=False)
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='custom_user_set',
+        blank=True,
+        help_text='The groups this user belongs to.',
+        verbose_name='groups',
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='custom_user_set',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions',
+    )
+
+class HospitalProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    hospital_name = models.CharField(max_length=50, unique=True)
+    license = models.CharField(max_length=50, unique=True)
+    address = models.TextField()
+    contact_email = models.EmailField()
+    is_approved = models.BooleanField(default=False)
+    date_of_registration = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        status = "Approved" if self.is_approved else "Approval Pending"
+        return f"{self.hospital_name} {status}"
+
+class Doctor(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    hospital = models.ForeignKey(HospitalProfile, on_delete=models.CASCADE)
+    specialization = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Dr.{self.user.last_name} - {self.hospital.hospital_name}"
+
 class Patient(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     age = models.IntegerField()
     gender = models.CharField(
         max_length=1,
