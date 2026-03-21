@@ -5,12 +5,12 @@ This project uses python3.12 version and has been tested in linux systems only( 
 ## Setup 
 
 - Clone this project.
-- Move to the cloned directory and reate a virtual environment.
+- Move to the cloned directory and create a virtual environment.
   ```
   python3.12 -m venv .venv
   ```
 - Activate the virtual environment and install the requirements from the requirements.txt
-- move to the melanoma dir and run 
+- Move to the melanoma dir and run 
   ```
   python manage.py makemigrations
 
